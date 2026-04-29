@@ -1,0 +1,234 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+
+// Sample portfolio projects
+const projects = [
+	{
+		id: 1,
+		title: 'E-Commerce Platform',
+		description: 'A modern e-commerce solution built with React and Node.js',
+		category: 'Web Development',
+		image: '/images/portfolio/ecommerce.jpg',
+		technologies: ['React', 'Node.js', 'MongoDB'],
+	},
+	{
+		id: 2,
+		title: 'Mobile Banking App',
+		description: 'Secure and user-friendly banking application for iOS and Android',
+		category: 'Mobile Development',
+		image: '/images/portfolio/banking.jpg',
+		technologies: ['React Native', 'TypeScript', 'Firebase'],
+	},
+	{
+		id: 3,
+		title: 'Design System',
+		description: 'Comprehensive design system with reusable components and guidelines',
+		category: 'Design',
+		image: '/images/portfolio/design-system.jpg',
+		technologies: ['Figma', 'Storybook', 'React'],
+	},
+	{
+		id: 4,
+		title: 'Data Visualization Dashboard',
+		description: 'Interactive dashboard for analyzing business metrics and KPIs',
+		category: 'Data Visualization',
+		image: '/images/portfolio/dashboard.jpg',
+		technologies: ['D3.js', 'Vue.js', 'Python'],
+	},
+	{
+		id: 5,
+		title: 'SaaS Platform',
+		description: 'Cloud-based SaaS solution for project management and collaboration',
+		category: 'Web Development',
+		image: '/images/portfolio/saas.jpg',
+		technologies: ['Next.js', 'PostgreSQL', 'AWS'],
+	},
+	{
+		id: 6,
+		title: 'Brand Identity',
+		description: 'Complete brand identity design including logo, colors, and typography',
+		category: 'Design',
+		image: '/images/portfolio/branding.jpg',
+		technologies: ['Illustrator', 'Photoshop', 'InDesign'],
+	},
+];
+
+// Create placeholder images using a service or use actual images
+// For demo purposes, we'll use placeholder.com
+---
+
+<Layout title="Portfolio - Content Hub">
+	<div class="portfolio-container">
+		<header class="portfolio-header">
+			<h1>Portfolio</h1>
+			<p>Explore my latest projects and creative work</p>
+		</header>
+
+		<div class="portfolio-grid">
+			{projects.map((project) => (
+				<article class="portfolio-item">
+					<div class="portfolio-image-wrapper">
+						<img 
+							src={`https://placehold.co/600x400/667eea/ffffff?text=${encodeURIComponent(project.title)}`}
+							alt={project.title}
+							loading="lazy"
+							class="portfolio-image"
+						/>
+						<div class="portfolio-overlay">
+							<div class="portfolio-tech">
+								{project.technologies.map(tech => (
+									<span class="tech-tag">{tech}</span>
+								))}
+							</div>
+						</div>
+					</div>
+					<div class="portfolio-content">
+						<span class="portfolio-category">{project.category}</span>
+						<h2 class="portfolio-title">{project.title}</h2>
+						<p class="portfolio-description">{project.description}</p>
+					</div>
+				</article>
+			))}
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.portfolio-container {
+		max-width: 1400px;
+		margin: 0 auto;
+		padding: 2rem;
+	}
+
+	.portfolio-header {
+		text-align: center;
+		margin-bottom: 4rem;
+	}
+
+	.portfolio-header h1 {
+		font-size: 3.5rem;
+		margin-bottom: 1rem;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.portfolio-header p {
+		font-size: 1.25rem;
+		color: #6b7280;
+	}
+
+	.portfolio-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+		gap: 2rem;
+	}
+
+	.portfolio-item {
+		background: white;
+		border-radius: 12px;
+		overflow: hidden;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		transition: all 0.3s ease;
+		border: 1px solid #e5e7eb;
+	}
+
+	.portfolio-item:hover {
+		transform: translateY(-8px);
+		box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+	}
+
+	.portfolio-image-wrapper {
+		position: relative;
+		width: 100%;
+		height: 250px;
+		overflow: hidden;
+		background: #f3f4f6;
+	}
+
+	.portfolio-image {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.3s ease;
+	}
+
+	.portfolio-item:hover .portfolio-image {
+		transform: scale(1.05);
+	}
+
+	.portfolio-overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+		opacity: 0;
+		transition: opacity 0.3s ease;
+		display: flex;
+		align-items: flex-end;
+		padding: 1rem;
+	}
+
+	.portfolio-item:hover .portfolio-overlay {
+		opacity: 1;
+	}
+
+	.portfolio-tech {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.tech-tag {
+		background: rgba(255, 255, 255, 0.9);
+		color: #1f2937;
+		padding: 0.25rem 0.75rem;
+		border-radius: 12px;
+		font-size: 0.75rem;
+		font-weight: 500;
+	}
+
+	.portfolio-content {
+		padding: 1.5rem;
+	}
+
+	.portfolio-category {
+		display: inline-block;
+		color: #667eea;
+		font-size: 0.875rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		margin-bottom: 0.5rem;
+	}
+
+	.portfolio-title {
+		font-size: 1.5rem;
+		margin: 0 0 0.75rem 0;
+		color: #1f2937;
+	}
+
+	.portfolio-description {
+		color: #6b7280;
+		line-height: 1.6;
+		margin: 0;
+	}
+
+	@media (max-width: 768px) {
+		.portfolio-container {
+			padding: 1rem;
+		}
+
+		.portfolio-header h1 {
+			font-size: 2.5rem;
+		}
+
+		.portfolio-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

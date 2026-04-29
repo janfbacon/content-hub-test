@@ -1,0 +1,10 @@
+version: 1
+blueprint: web_static
+web:
+  output_dir: "dist"       # Astro's default build folder
+  error_document: "index.html" # Fixed your subpage navigation errors
+  use_router_rewrite: true
+build:
+  install_command: "npm install"
+  command: "npm run build"
+  runtime: "nodejs22"      # Uses the modern environment we verified today
