@@ -1,0 +1,170 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import LiveSearch from '../../components/LiveSearch';
+import BlogCard from '../../components/BlogCard.astro';
+
+const allPosts = await getCollection('blog');
+const posts = allPosts.sort((a, b) => 
+	b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+
+// Get all unique tags
+const allTags = [...new Set(allPosts.flatMap(post => post.data.tags))];
+---
+
+<Layout title="Blog - Content Hub">
+	<div class="blog-container">
+		<header class="blog-header">
+			<h1>Blog</h1>
+			<p>Discover articles about web development, design, and more</p>
+			<LiveSearch client:load posts={posts.map(p => ({
+				slug: p.slug,
+				title: p.data.title,
+				description: p.data.description,
+				tags: p.data.tags
+			}))} />
+		</header>
+
+		<aside class="tags-sidebar">
+			<h2>Tags</h2>
+			<ul class="tags-list">
+				{allTags.map(tag => (
+					<li>
+						<a href={`/blog/tags/${tag}`} class="tag-link">
+							{tag}
+						</a>
+					</li>
+				))}
+			</ul>
+		</aside>
+
+		<main class="blog-main">
+			<div id="blog-results" class="blog-grid">
+				{posts.map((post) => (
+					<BlogCard post={post} />
+				))}
+			</div>
+		</main>
+	</div>
+</Layout>
+
+<style>
+	.blog-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 2rem;
+		display: grid;
+		grid-template-columns: 200px 1fr;
+		gap: 2rem;
+	}
+
+	.blog-header {
+		grid-column: 1 / -1;
+		margin-bottom: 2rem;
+	}
+
+	.blog-header h1 {
+		font-size: 3rem;
+		margin-bottom: 0.5rem;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.blog-header p {
+		color: #666;
+		font-size: 1.1rem;
+		margin-bottom: 2rem;
+	}
+
+	.tags-sidebar {
+		position: sticky;
+		top: 2rem;
+		height: fit-content;
+	}
+
+	.tags-sidebar h2 {
+		font-size: 1.2rem;
+		margin-bottom: 1rem;
+	}
+
+	.tags-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.tag-link {
+		display: block;
+		padding: 0.5rem 1rem;
+		background: #f3f4f6;
+		border-radius: 6px;
+		text-decoration: none;
+		color: #333;
+		transition: all 0.2s;
+	}
+
+	.tag-link:hover {
+		background: #667eea;
+		color: white;
+		transform: translateX(4px);
+	}
+
+	.blog-main {
+		min-height: 400px;
+	}
+
+	.blog-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		gap: 2rem;
+	}
+
+	:global(.live-search) {
+		margin-bottom: 2rem;
+	}
+
+	:global(.search-input) {
+		width: 100%;
+		padding: 1rem;
+		font-size: 1rem;
+		border: 2px solid #e5e7eb;
+		border-radius: 8px;
+		transition: border-color 0.2s;
+	}
+
+	:global(.search-input:focus) {
+		outline: none;
+		border-color: #667eea;
+	}
+
+	:global(.search-results-count) {
+		margin-top: 0.5rem;
+		color: #6b7280;
+		font-size: 0.875rem;
+	}
+
+	@media (max-width: 768px) {
+		.blog-container {
+			grid-template-columns: 1fr;
+		}
+
+		.tags-sidebar {
+			position: static;
+		}
+
+		.tags-list {
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
+
+		.blog-header h1 {
+			font-size: 2rem;
+		}
+	}
+</style>
